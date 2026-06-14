@@ -1,9 +1,5 @@
-import { Text, View } from "react-native";
+import { Stack } from "expo-router";
 
 export default function _layout() {
-  return (
-    <View>
-      <Text>_layout</Text>
-    </View>
-  );
+  return <Stack />;
 }
