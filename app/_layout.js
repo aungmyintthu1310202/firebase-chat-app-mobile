@@ -1,8 +1,8 @@
 import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
+import { MenuProvider } from "react-native-popup-menu";
 import { AuthContextProvider, useAuth } from "../context/authContext";
 import "../global.css";
-
 // This layout is used to wrap all the pages in the app, providing a consistent structure and shared functionality (e.g., authentication state)
 const Mainlayout = () => {
   const { isAuthenticated } = useAuth();
@@ -27,8 +27,10 @@ const Mainlayout = () => {
 
 export default function _layout() {
   return (
-    <AuthContextProvider>
-      <Mainlayout />
-    </AuthContextProvider>
+    <MenuProvider>
+      <AuthContextProvider>
+        <Mainlayout />
+      </AuthContextProvider>
+    </MenuProvider>
   );
 }
