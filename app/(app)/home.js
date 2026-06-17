@@ -1,17 +1,43 @@
-import { Pressable, Text, View } from "react-native";
+import { getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, View } from "react-native";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import ChatList from "../../components/ChatList";
 import { useAuth } from "../../context/authContext";
+import { usersRef } from "../../firebaseConfig";
 
 export default function Home() {
-  const { logout } = useAuth();
-  const handleLogout = async () => {
-    await logout();
+  const { logout, user } = useAuth();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    if (user?.uid) {
+      getUsers();
+    }
+  });
+
+  // Fetch user from firebase
+  const getUsers = async () => {
+    // not include login user data
+    const q = query(usersRef, where("userId", "!=", user?.uid));
+
+    const querySnapshot = await getDocs(q);
+    let data = [];
+    querySnapshot.forEach((doc) => {
+      data.push({ ...doc.data() });
+    });
+    setUsers(data);
   };
+
   return (
-    <View>
-      <Text>Home Page</Text>
-      <Pressable onPress={handleLogout}>
-        <Text>Sign Out</Text>
-      </Pressable>
+    <View className="flex-1 bg-white">
+      {users.length > 0 ? (
+        <ChatList users={users} />
+      ) : (
+        <View className="flex justify-center" style={{ paddingTop: hp(40) }}>
+          <ActivityIndicator size="large" color="grey" />
+        </View>
+      )}
     </View>
   );
 }
