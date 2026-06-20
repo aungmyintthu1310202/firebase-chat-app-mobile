@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <View className="flex-1 bg-white">
       {users.length > 0 ? (
-        <ChatList users={users} />
+        <ChatList currentUser={user} users={users} />
       ) : (
         <View className="flex justify-center" style={{ paddingTop: hp(40) }}>
           <ActivityIndicator size="large" color="grey" />
